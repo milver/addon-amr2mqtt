@@ -1,3 +1,5 @@
+# External Dependencies:
+# - github.com/bemasher/rtlamr (v0.9.4) - RTL-SDR to MQTT bridge
 # hadolint global ignore=DL3008
 # ignoring DL3008 (pin versions) as we are using the official images
 ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base/amd64:9.2.0
@@ -59,6 +61,7 @@ LABEL \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
     maintainer="Alvarofg" \
+    org.opencontainers.image.dependencies="github.com/bemasher/rtlamr:0.9.4" \
     org.opencontainers.image.title="${BUILD_NAME}" \
     org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
     org.opencontainers.image.vendor="Alvarofg's Home Assistant Add-ons" \
@@ -69,4 +72,4 @@ LABEL \
     org.opencontainers.image.documentation="https://github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
     org.opencontainers.image.created=${BUILD_DATE} \
     org.opencontainers.image.revision=${BUILD_REF} \
-    org.opencontainers.image.version=${BUILD_VERSION} \
+    org.opencontainers.image.version=${BUILD_VERSION}

@@ -104,15 +104,15 @@ Example add-on configuration:
 
 ```yaml
 meters:
-  - id: 12345678
-    protocol: scm
-    name: My gas meter
-    type: gas
-    multiplier: 0.01
-    unit_of_measurement: CCF
+   - id: 12345678
+     protocol: scm
+     name: My gas meter
+     type: gas
+     multiplier: 0.01
+     unit_of_measurement: CCF
 mqtt:
-  host: 127.0.0.1
-  port: 1883
+   host: 127.0.0.1
+   port: 1883
 ```
 
 **Note**: _This is just an example, don't copy and paste it! Create your own!_
@@ -279,7 +279,7 @@ asking it to do. R900 messages specifically seem to require a lot of work to pro
 and not all machines can keep up. See [here][reddit-ll-issue] for a full explanation.
 
 If you are doing debug and discovery and have `meters` set to empty then
-you can just ignore this. Just finish yoour debugging and then fill in `meters`
+you can just ignore this. Just finish your debugging and then fill in `meters`
 so it only processes messages in the protocol(s) you need. Hopefully it will go
 away then.
 
