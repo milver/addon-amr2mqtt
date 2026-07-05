@@ -2,14 +2,28 @@
 # shellcheck shell=bash
 # ==============================================================================
 # Home Assistant Add-on: AMR2MQTT
-# Runs rtl_tcp 
+# Runs rtl_tcp
 # ==============================================================================
 
 bashio::log.info 'Starting rtl_tcp daemon...'
-# If log level is set higher then notice, suppress all output from rtl_tcp
-case "$(bashio::config 'log_level')" in \
-    warning)    ;& \
-    error)      ;& \
-    fatal)      /usr/bin/rtl_tcp > /dev/null 2>&1 ;; \
-    *)          /usr/bin/rtl_tcp ;; \
-esac;
+
+declare -a rtl_tcp_args=()
+declare device_index
+
+device_index="$(bashio::config 'rtl_device_index' '')"
+
+if bashio::var.has_value "${device_index}"; then
+    bashio::log.info "Configured RTL-SDR device index: ${device_index}"
+    rtl_tcp_args+=("-d" "${device_index}")
+else
+    bashio::log.info "No rtl_device_index configured; rtl_tcp will use its default device"
+fi
+
+case "$(bashio::config 'log_level')" in
+    warning|error|fatal)
+        exec /usr/bin/rtl_tcp "${rtl_tcp_args[@]}" > /dev/null 2>&1
+        ;;
+    *)
+        exec /usr/bin/rtl_tcp "${rtl_tcp_args[@]}"
+        ;;
+esac
