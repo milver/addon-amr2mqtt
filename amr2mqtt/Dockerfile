@@ -10,7 +10,14 @@ FROM golang:1.26.4-alpine3.23 AS build_rtlamr
 ENV RTLAMR_VERSION=0.9.5
 ENV GOBIN=/usr/bin
 RUN set -eux; \
-    go install "github.com/bemasher/rtlamr@v${RTLAMR_VERSION}"; \
+    go mod download "github.com/bemasher/rtlamr@v${RTLAMR_VERSION}"; \
+    rtlamr_dir="$(go env GOPATH)/pkg/mod/github.com/bemasher/rtlamr@v${RTLAMR_VERSION}"; \
+    chmod -R u+w "${rtlamr_dir}"; \
+    grep -F 'bytesRead>>1 < rcvr.d.Cfg.SampleRate' "${rtlamr_dir}/main.go"; \
+    sed -i 's/bytesRead>>1 < rcvr.d.Cfg.SampleRate/bytesRead>>1 < (rcvr.d.Cfg.SampleRate * 9 \/ 10)/' "${rtlamr_dir}/main.go"; \
+    grep -F 'bytesRead>>1 < (rcvr.d.Cfg.SampleRate * 9 / 10)' "${rtlamr_dir}/main.go"; \
+    cd "${rtlamr_dir}"; \
+    go install .; \
     rtlamr --version
 
 
